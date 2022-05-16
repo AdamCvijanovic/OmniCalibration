@@ -78,6 +78,6 @@ public class OmniController_Example : MonoBehaviour
         if (MovementComponent.GetForwardMovement() != Vector3.zero)
             m_CharacterController.Move(MovementComponent.GetForwardMovement() * speed);
         if (MovementComponent.GetStrafeMovement() != Vector3.zero)
-            m_CharacterController.Move(MovementComponent.GetStrafeMovement() * speed);
+            m_CharacterController.Move(MovementComponent.GetStrafeMovement());
     }
 }
