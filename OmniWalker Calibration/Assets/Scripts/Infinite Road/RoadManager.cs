@@ -17,19 +17,25 @@ public class RoadManager : MonoBehaviour
     public float segmentOffset;
     public int roadPosition;
 
+    //Navmesh
+    NavigationBaker _navBaker;
+    public GameObject NavCube;
 
     //Physics
     public BoxCollider advanceCollider;
+    public BoxCollider EndBlock;
+
 
 
     void Awake()
     {
         SharedInstance = this;
+        _navBaker = FindObjectOfType<NavigationBaker>();
     }
     // Start is called before the first frame update
     void Start()
     {
-        InstatiateRoads();
+        InstantiateRoads();
     }
 
     // Update is called once per frame
@@ -38,13 +44,14 @@ public class RoadManager : MonoBehaviour
         
     }
 
-    public void InstatiateRoads()
+    public void InstantiateRoads()
     {
         _pooledObjects = new List<GameObject>();
         GameObject tmp;
         for (int i = _pooledObjects.Count; i < amountToPool; i++)
         {
             tmp = Instantiate(_objectToPool);
+            //_navBaker.AddSurface(tmp);
             //tmp.SetActive(false);
             _pooledObjects.Insert(0, tmp);
 
@@ -80,47 +87,58 @@ public class RoadManager : MonoBehaviour
         return null;
     }
 
+    public void IncrementRoad(GameObject playerObj, GameObject roadObj)
+    {
+        float minDst = 70;
+        float dst = Vector3.Distance(playerObj.transform.position, FarthestSegment().transform.position);
+
+
+        if(dst > minDst)
+        {
+            RetractSegment(playerObj);
+            AdvanceSegment(playerObj);
+        }
+        
+        
+    }
+
+    //depreciated
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
         {
             Debug.Log("BoundaryCrossed");
 
-            RetractSegment();
+            //RetractSegment();
             //AdvanceSegment();
-            
         }
     }
 
-    public void RetractSegment()
+    public void RetractSegment(GameObject player)
     {
 
-        float lowestZ = _pooledObjects[_pooledObjects.Count-1].transform.position.z;
-        GameObject tmp = _pooledObjects[_pooledObjects.Count-1];
 
-        for (int i = 0; i < amountToPool; i++)
-        {
-            if(_pooledObjects[i].transform.position.z < lowestZ)
-            {
-                lowestZ = _pooledObjects[i].transform.position.z;
-                tmp = _pooledObjects[i];
-            }
-        }
+        GameObject tmp = FarthestSegment();
         //tmp.SetActive(false);
 
         RoadSegment roadSegment = tmp.GetComponent<RoadSegment>();
         roadSegment.SetTransform();
 
         //advanceCollider.center = new Vector3(advanceCollider.center.x, advanceCollider.center.y, advanceCollider.center.z + (segmentOffset));
-        _pooledObjects.Remove(tmp);
-        _pooledObjects.Insert(0, tmp);
+        //_pooledObjects.Remove(tmp);
+        //_pooledObjects.Insert(0, tmp);
 
-        roadPosition++;
+        //roadPosition++;
         //tmp.GetComponent<RoadSegment>().DeActivateSegment();
+
+        GameObject newEnd = FarthestSegment();
+        EndBlock.transform.position = newEnd.transform.position;
+        AdvanceNavmesh(player);
+
 
     }
 
-    public void AdvanceSegment()
+    public void AdvanceSegment(GameObject player)
     {
         GameObject tmp = GetPooledObject();
         if (tmp != null)
@@ -131,6 +149,8 @@ public class RoadManager : MonoBehaviour
             roadSegment.SetTransform();
             //advanceCollider.center = new Vector3(advanceCollider.center.x,advanceCollider.center.y , advanceCollider.center.z + (segmentOffset));
             _pooledObjects.Insert(0, tmp);
+
+            AdvanceNavmesh(player);
         }
         else
         {
@@ -139,8 +159,28 @@ public class RoadManager : MonoBehaviour
        
     }
 
-    //public GameObject FarthestSegment()
-    //{
+    public GameObject FarthestSegment()
+    {
+        float lowestZ = _pooledObjects[0].transform.position.z;
+        GameObject tmp = _pooledObjects[0];
 
-    //}
+        for (int i = 0; i < amountToPool-1; i++)
+        {
+            if (_pooledObjects[i].transform.position.z < lowestZ)
+            {
+                lowestZ = _pooledObjects[i].transform.position.z;
+                tmp = _pooledObjects[i];
+            }
+        }
+
+        return tmp;
+    }
+
+    public void AdvanceNavmesh(GameObject player)
+    {
+        NavCube.transform.position = new Vector3(NavCube.transform.position.x, NavCube.transform.position.y, player.transform.position.z);
+
+        _navBaker.UpdateMesh();
+
+    }
 }
