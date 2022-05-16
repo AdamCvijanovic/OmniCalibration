@@ -620,7 +620,7 @@ public class OmniMovementComponent : MonoBehaviour
         strafeMovement = forwardMovement;
 
         //calculate angle between camera and omni
-        angleBetweenOmniAndCamera = ComputeAngleBetweenControllerAndCamera();
+        //angleBetweenOmniAndCamera = ComputeAngleBetweenControllerAndCamera();
 
         float forwardRotation = 0f;
 

@@ -18,7 +18,9 @@ public class FootTrack : MonoBehaviour
 
 
     public Vector3 Roffset;
+    public Vector3 RVelocity;
     public Vector3 Loffset;
+    public Vector3 LVelocity;
     public Vector2 hidInput;
 
     [Header("-----Right Foot Data-----")]
@@ -106,15 +108,21 @@ public class FootTrack : MonoBehaviour
 
 
         //RFoot.transform.rotation =  RQuat * Quaternion.Euler(0,0,0);
-        RFoot.transform.localPosition = Roffset + (0.5f * RAccel).normalized;
+
+        //normalize or not?
+        //RFoot.transform.localPosition = Roffset + (0.5f * RAccel);
+
+        RFoot.transform.localPosition = Vector3.SmoothDamp(RFoot.transform.localPosition, Roffset + RAccel, ref RVelocity, Time.deltaTime, 10f);
 
         //LFoot.transform.rotation = LQuat;
-        LFoot.transform.localPosition = Loffset + (0.5f*LAccel).normalized;
+        //LFoot.transform.localPosition = Loffset + (0.5f*LAccel);
+        LFoot.transform.localPosition = Vector3.SmoothDamp(LFoot.transform.localPosition, Loffset + LAccel, ref LVelocity, Time.deltaTime, 10f);
+
 
 
     }
 
-   public void UpdateForwardDirection()
+    public void UpdateForwardDirection()
     {
         graphicsObj.transform.forward = forwardDirection.transform.forward;
     }

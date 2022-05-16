@@ -18,7 +18,9 @@ public class OmniController_Example : MonoBehaviour
 
     protected OmniMovementComponent MovementComponent;
     private CharacterController m_CharacterController;
-    private Camera cameraRef;
+    //private Camera cameraRef;
+
+    public float speed;
 
     private bool RotationCorrected = false;
 
@@ -32,31 +34,31 @@ public class OmniController_Example : MonoBehaviour
 
     void CorrectSpawnForward()
     {
-        RotationCorrected = true;
-
-        Vector3 resultRotation = new Vector3(0.0f, 0.0f, 0.0f);
-        Vector3 spawnRotation = transform.rotation.eulerAngles;
-        cameraRef = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        Vector3 cameraRotation = cameraRef.transform.rotation.eulerAngles;
-
-        float spawnRotationYaw = spawnRotation.y;
-        float cameraYaw = cameraRotation.y;
-        float difference = spawnRotationYaw - cameraYaw;
-
-        resultRotation.y = difference;
-
-        transform.Rotate(resultRotation);
+       // RotationCorrected = true;
+       //
+       // Vector3 resultRotation = new Vector3(0.0f, 0.0f, 0.0f);
+       // Vector3 spawnRotation = transform.rotation.eulerAngles;
+       // cameraRef = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+       // Vector3 cameraRotation = cameraRef.transform.rotation.eulerAngles;
+       //
+       // float spawnRotationYaw = spawnRotation.y;
+       // float cameraYaw = cameraRotation.y;
+       // float difference = spawnRotationYaw - cameraYaw;
+       //
+       // resultRotation.y = difference;
+       //
+       // transform.Rotate(resultRotation);
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (!RotationCorrected)
-        {
-            if (VRUtil.isPresent()/*UnityEngine.XR.XRDevice.isPresent*/)
-                CorrectSpawnForward();
-        }
+        //if (!RotationCorrected)
+        //{
+        //    if (VRUtil.isPresent()/*UnityEngine.XR.XRDevice.isPresent*/)
+        //        CorrectSpawnForward();
+        //}
 
         UseOmniInputToMovePlayer();
     }
@@ -66,14 +68,16 @@ public class OmniController_Example : MonoBehaviour
     void UseOmniInputToMovePlayer()
     {
         if (MovementComponent.omniFound)
+        {
             MovementComponent.GetOmniInputForCharacterMovement();
+        }
         else if (MovementComponent.developerMode)
             MovementComponent.DeveloperModeUpdate();
 
 
         if (MovementComponent.GetForwardMovement() != Vector3.zero)
-            m_CharacterController.Move(MovementComponent.GetForwardMovement());
+            m_CharacterController.Move(MovementComponent.GetForwardMovement() * speed);
         if (MovementComponent.GetStrafeMovement() != Vector3.zero)
-            m_CharacterController.Move(MovementComponent.GetStrafeMovement());
+            m_CharacterController.Move(MovementComponent.GetStrafeMovement() * speed);
     }
 }
