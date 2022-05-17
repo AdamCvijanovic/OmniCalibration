@@ -164,9 +164,9 @@ public class RoadManager : MonoBehaviour
         float lowestZ = _pooledObjects[0].transform.position.z;
         GameObject tmp = _pooledObjects[0];
 
-        for (int i = 0; i < amountToPool-1; i++)
+        for (int i = 0; i < _pooledObjects.Count; i++)
         {
-            if (_pooledObjects[i].transform.position.z < lowestZ)
+            if (_pooledObjects[i].transform.position.z <= lowestZ)
             {
                 lowestZ = _pooledObjects[i].transform.position.z;
                 tmp = _pooledObjects[i];
