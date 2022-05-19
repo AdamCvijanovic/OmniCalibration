@@ -120,6 +120,7 @@ public class BuildingManager : MonoBehaviour
         float length = newBuilding.GetComponent<MeshCollider>().bounds.extents.z;
         float width = newBuilding.GetComponent<MeshCollider>().bounds.extents.x;
         newBuilding.transform.position = new Vector3(_buildingFrontierRight.position.x + (1.15f * width), _buildingFrontierRight.position.y, _buildingFrontierRight.position.z + length);
+        newBuilding.transform.rotation = Quaternion.Euler(0, 180, 0);
         _buildingFrontierRight.position = new Vector3(_buildingFrontierRight.position.x, _buildingFrontierRight.position.y, _buildingFrontierRight.position.z + (2 * length));
     }
 
