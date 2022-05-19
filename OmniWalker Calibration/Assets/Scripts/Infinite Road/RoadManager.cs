@@ -23,7 +23,9 @@ public class RoadManager : MonoBehaviour
 
     //Physics
     public BoxCollider advanceCollider;
-    public BoxCollider EndBlock;
+    public GameObject _endBlock;
+
+    public float minDst;
 
 
 
@@ -93,7 +95,6 @@ public class RoadManager : MonoBehaviour
         //Increment buildings too
         buildingManager.UpdateBuildings();
 
-        float minDst = 70;
         float dst = Vector3.Distance(playerObj.transform.position, FarthestSegment().transform.position);
 
 
@@ -136,7 +137,7 @@ public class RoadManager : MonoBehaviour
         //tmp.GetComponent<RoadSegment>().DeActivateSegment();
 
         GameObject newEnd = FarthestSegment();
-        EndBlock.transform.position = newEnd.transform.position;
+        _endBlock.transform.position = newEnd.transform.position;
         AdvanceNavmesh(player);
 
 
