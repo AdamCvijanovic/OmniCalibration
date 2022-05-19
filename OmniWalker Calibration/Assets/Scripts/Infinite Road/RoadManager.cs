@@ -154,7 +154,7 @@ public class RoadManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Should be old segment here");
+            //Debug.Log("Should be old segment here");
         }
        
     }

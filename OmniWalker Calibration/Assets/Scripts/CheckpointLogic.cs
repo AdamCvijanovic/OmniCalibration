@@ -31,9 +31,20 @@ public class CheckpointLogic : MonoBehaviour
         Debug.Log("Checkpoint " + gameObject.name + " Triggered" );
         if(_checkpointManager != null)
         {
-            _checkpointManager.UpdateCheckpoints();
+            //_checkpointManager.UpdateCheckpoints();
+            _checkpointManager.AdvanceCheckpoints(this);
         }
 
+    }
+
+    public void ActivateCheckpoint()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void DectivateCheckpoint()
+    {
+        gameObject.SetActive(false);
     }
 
 }
