@@ -6,21 +6,24 @@ public class CheckpointManager : MonoBehaviour
 {
 
     public List<CheckpointLogic> checkpoints = new List<CheckpointLogic>();
+
    
     public int currentCheckpointNum;
+    public int advanceRate;
+    public int checkpointFrontier;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentCheckpointNum = 0;
-
         SetCheckpointsActive();
 
         for (int i = 0; i < checkpoints.Count; i++)
         {
             checkpoints[i].SetManager(this);
             checkpoints[i].transform.SetParent(this.transform);
+
         }
+
     }
 
     // Update is called once per frame
@@ -33,44 +36,86 @@ public class CheckpointManager : MonoBehaviour
     {
         for (int i = 0; i < checkpoints.Count; i++)
         {
-            if (i == currentCheckpointNum)
-            {
-                checkpoints[i].gameObject.SetActive(true);
-            }
-            else
-            {
-
-                checkpoints[i].gameObject.SetActive(false);
-            }
+            checkpoints[i].gameObject.SetActive(true);
         }
     }
 
     public void UpdateCheckpoints()
     {
 
-        if(currentCheckpointNum != checkpoints.Count - 1)
-        {
-            currentCheckpointNum++;
+        //if(currentCheckpointNum != checkpoints.Count - 1)
+        //{
+        //    currentCheckpointNum++;
 
-            for (int i = 0; i < checkpoints.Count; i++)
+        //    for (int i = 0; i < checkpoints.Count; i++)
+        //    {
+        //        if (i == currentCheckpointNum)
+        //        {
+        //            checkpoints[i].gameObject.SetActive(true);
+        //        }
+        //        else
+        //        {
+
+        //            checkpoints[i].gameObject.SetActive(false);
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    checkpoints[currentCheckpointNum].gameObject.SetActive(false);
+        //    Debug.Log("Complete!!");
+        //}
+
+        //AdvanceCheckpoints();
+
+
+    }
+
+    public void AdvanceCheckpoints(CheckpointLogic checkpoint)
+    {
+
+        float num = checkpoint.checkpointNumber;
+
+        AdvanceFrontier();
+        MoveCheckPoint(checkpoint);
+
+        for (int i = 0; i < checkpoints.Count; i++)
+        {
+
+            if(checkpoints[i].checkpointNumber < num)
             {
-                if (i == currentCheckpointNum)
-                {
-                    checkpoints[i].gameObject.SetActive(true);
-                }
-                else
-                {
-
-                    checkpoints[i].gameObject.SetActive(false);
-                }
+                AdvanceFrontier();
+                MoveCheckPoint(checkpoints[i]);
             }
-        }
-        else
-        {
-            checkpoints[currentCheckpointNum].gameObject.SetActive(false);
-            Debug.Log("Complete!!");
+
         }
 
         
     }
+
+    public void AdvanceFrontier()
+    {
+        currentCheckpointNum++;
+        checkpointFrontier = advanceRate * currentCheckpointNum;
+    }
+
+    public void RemoveFromTail(CheckpointLogic checkpoint)
+    {
+        checkpoints.Remove(checkpoint);
+
+    }
+
+    public void AddToHead(CheckpointLogic checkpoint)
+    {
+        checkpoints.Add(checkpoint);
+    }
+
+    public void MoveCheckPoint(CheckpointLogic checkpoint)
+    {
+        checkpoint.transform.position = new Vector3(checkpoint.transform.position.x, checkpoint.transform.position.y, checkpointFrontier);
+        checkpoint.checkpointNumber = currentCheckpointNum;
+    }
+
+
+
 }

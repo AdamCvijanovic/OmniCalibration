@@ -8,7 +8,7 @@ public class RoadManager : MonoBehaviour
 
     public static RoadManager SharedInstance;
 
-
+    public BuildingManager buildingManager;
 
     //object pool
     public List<GameObject> _pooledObjects;
@@ -23,7 +23,9 @@ public class RoadManager : MonoBehaviour
 
     //Physics
     public BoxCollider advanceCollider;
-    public BoxCollider EndBlock;
+    public GameObject _endBlock;
+
+    public float minDst;
 
 
 
@@ -35,6 +37,7 @@ public class RoadManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        buildingManager = FindObjectOfType<BuildingManager>();
         InstantiateRoads();
     }
 
@@ -89,7 +92,9 @@ public class RoadManager : MonoBehaviour
 
     public void IncrementRoad(GameObject playerObj, GameObject roadObj)
     {
-        float minDst = 70;
+        //Increment buildings too
+        buildingManager.UpdateBuildings();
+
         float dst = Vector3.Distance(playerObj.transform.position, FarthestSegment().transform.position);
 
 
@@ -132,7 +137,7 @@ public class RoadManager : MonoBehaviour
         //tmp.GetComponent<RoadSegment>().DeActivateSegment();
 
         GameObject newEnd = FarthestSegment();
-        EndBlock.transform.position = newEnd.transform.position;
+        _endBlock.transform.position = newEnd.transform.position;
         AdvanceNavmesh(player);
 
 
@@ -154,7 +159,7 @@ public class RoadManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Should be old segment here");
+            //Debug.Log("Should be old segment here");
         }
        
     }
