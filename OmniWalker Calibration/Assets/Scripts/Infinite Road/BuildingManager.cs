@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class BuildingManager : MonoBehaviour
 {
-
-    public bool RightSide;
-
     public List<GameObject> _buildingPrefabs;
     public List<GameObject> _buildingListLeft;
     public List<GameObject> _buildingListRight;
@@ -75,6 +72,53 @@ public class BuildingManager : MonoBehaviour
             _buildingFrontierRight.position = new Vector3(_buildingFrontierRight.position.x, _buildingFrontierRight.position.y, _buildingFrontierRight.position.z + (2 * length));
 
         }
+    }
+
+    public void UpdateBuildings()
+    {
+
+        //List<GameObject> temp = new List<GameObject>();
+        DestroyOld();
+
+        //create new
+        CreateNew();
+
+
+    }
+
+    public void DestroyOld()
+    {
+        for (int i = 0; i < _buildingListLeft.Count; i++)
+        {
+            if (Vector3.Distance(_buildingListLeft[i].transform.position, _player.transform.position) > _deSpawnDst)
+            {
+                Destroy(_buildingListLeft[i]);
+                _buildingListLeft.Remove(_buildingListLeft[i]);
+            }
+        }
+    }
+
+    public void CreateNew()
+    {
+
+        Debug.Log("DISANTCE == " + Vector3.Distance(_buildingFrontierLeft.transform.position, _player.transform.position));
+
+        while(Vector3.Distance(_buildingFrontierLeft.transform.position, _player.transform.position) < _spawnDst)
+        {
+            AddToLeft();
+        }
+    }
+
+    public void AddToLeft()
+    {
+        int index = Random.Range(0, _buildingPrefabs.Count);
+        GameObject newBuilding = Instantiate<GameObject>(_buildingPrefabs[index], _buildingChainLeft);
+        _buildingListLeft.Add(newBuilding);
+
+        float length = newBuilding.GetComponent<MeshCollider>().bounds.extents.z;
+        float width = newBuilding.GetComponent<MeshCollider>().bounds.extents.x;
+        newBuilding.transform.position = new Vector3(_buildingFrontierLeft.position.x - (1.15f * width), _buildingFrontierLeft.position.y, _buildingFrontierLeft.position.z + length);
+        _buildingFrontierLeft.position = new Vector3(_buildingFrontierLeft.position.x, _buildingFrontierLeft.position.y, _buildingFrontierLeft.position.z + (2 * length));
     }
 
 

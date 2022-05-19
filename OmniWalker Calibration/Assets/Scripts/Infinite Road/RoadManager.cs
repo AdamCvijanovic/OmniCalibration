@@ -8,7 +8,7 @@ public class RoadManager : MonoBehaviour
 
     public static RoadManager SharedInstance;
 
-
+    public BuildingManager buildingManager;
 
     //object pool
     public List<GameObject> _pooledObjects;
@@ -35,6 +35,7 @@ public class RoadManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        buildingManager = FindObjectOfType<BuildingManager>();
         InstantiateRoads();
     }
 
@@ -89,6 +90,9 @@ public class RoadManager : MonoBehaviour
 
     public void IncrementRoad(GameObject playerObj, GameObject roadObj)
     {
+        //Increment buildings too
+        buildingManager.UpdateBuildings();
+
         float minDst = 70;
         float dst = Vector3.Distance(playerObj.transform.position, FarthestSegment().transform.position);
 

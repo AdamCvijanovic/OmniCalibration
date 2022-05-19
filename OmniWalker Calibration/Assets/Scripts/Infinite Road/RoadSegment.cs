@@ -49,6 +49,7 @@ public class RoadSegment : MonoBehaviour
             //Debug.Log("BoundaryCrossed");
 
             roadManager.IncrementRoad(other.gameObject, this.gameObject);
+            
             //AdvanceSegment();
 
         }

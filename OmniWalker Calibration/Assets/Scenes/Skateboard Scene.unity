@@ -330,7 +330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5d3b2180f76697488b0d8f9d06e4b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RightSide: 0
   _buildingPrefabs:
   - {fileID: 113294, guid: 85c5ecd5a01f542499944cbfe9dd1cf8, type: 3}
   - {fileID: 121598, guid: 0876618a1528b3c439a2dfb8aa96f9bb, type: 3}
@@ -363,13 +362,14 @@ MonoBehaviour:
   - {fileID: 134348, guid: 09676f1ba84ec5d48912d47723cefe7e, type: 3}
   - {fileID: 119446, guid: 6a03abf06fc3f154abc371fa4e38f7d1, type: 3}
   _buildingListLeft: []
-  _buildingListRights: []
+  _buildingListRight: []
   _buildingChainLeft: {fileID: 648007160}
   _buildingChainRight: {fileID: 479358286}
   _buildingFrontierLeft: {fileID: 715783339}
   _buildingFrontierRight: {fileID: 2132747317}
   _player: {fileID: 0}
-  _minSpawnDst: 0
+  _spawnDst: 100
+  _deSpawnDst: 100
 --- !u!4 &164986345 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 493312, guid: 12e574493ffa82e478d1852f78156fd3, type: 3}
